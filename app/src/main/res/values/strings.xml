@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Piclicker</string>
+    <string name="koala_description">Button to view a koala image</string>
+    <string name="clicks_0">Clicks: 0</string>
 </resources>
