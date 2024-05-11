@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Facts" 
+        android:icon="@drawable/facts"
+        android:id="@+id/facts"/>
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Themes"
+        android:icon="@drawable/menu"
+        android:id="@+id/themes"/>
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Shop"
+        android:icon="@drawable/shop"
+        android:id="@+id/shop"/>
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Account"
+        android:icon="@drawable/account"
+        android:id="@+id/account"/>
+</menu>
