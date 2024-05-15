@@ -1,17 +1,17 @@
 package si.uni_lj.fe.tnuv.piclicker;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.content.SharedPreferences;
 import android.widget.ImageButton;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class GameFragment extends Fragment {
@@ -46,7 +46,31 @@ public class GameFragment extends Fragment {
             editor.apply();
         });
 
+        // Retrieve the selected button information
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String selectedButton = bundle.getString("selected_button");
+            int imageResource = getImageResource(selectedButton);
+
+            // Update the ImageButton with the selected image
+            btnClick.setImageResource(imageResource);
+        }
+
         return rootView;
+    }
+
+    // Method to map button text to image resource
+    private int getImageResource(String buttonText) {
+        switch (buttonText) {
+            case "Koala":
+                return R.drawable.koala;
+            case "Slovenija":
+                return R.drawable.slovenia;
+            case "Pluton":
+                return R.drawable.pluto;
+            default:
+                return R.drawable.koala; // Default image
+        }
     }
 
     private void updateCookiesDisplay() {
