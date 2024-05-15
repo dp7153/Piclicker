@@ -64,10 +64,17 @@ public class GameFragment extends Fragment {
         switch (buttonText) {
             case "Koala":
                 return R.drawable.koala;
-            case "Slovenija":
+            case "Slovenia":
                 return R.drawable.slovenia;
-            case "Pluton":
+            case "Pluto":
                 return R.drawable.pluto;
+            case "Mars":
+                return R.drawable.mars;
+            case "Bear":
+                return R.drawable.bear;
+            case "Austria":
+                return R.drawable.austria;
+
             default:
                 return R.drawable.koala; // Default image
         }

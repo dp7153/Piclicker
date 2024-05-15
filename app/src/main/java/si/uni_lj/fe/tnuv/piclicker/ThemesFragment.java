@@ -21,17 +21,30 @@ public class ThemesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_themes, container, false);
 
-        // Create a list of button labels
-        String[] buttonLabels = {"Koala", "Slovenija", "Pluton"};
+        // Create arrays of button labels for each list
+        String[] animals = {"Koala", "Bear"};
+        String[] countries = {"Austria", "Slovenia"};
+        String[] planets = {"Mars", "Pluto"};
 
-        // Get the frame layout to add buttons dynamically
-        FrameLayout frameLayout = rootView.findViewById(R.id.frame_layout);
+        // Get the frame layouts to add buttons dynamically
+        FrameLayout frameLayoutAnimals = rootView.findViewById(R.id.frame_layout_animals);
+        FrameLayout frameLayoutCountries = rootView.findViewById(R.id.frame_layout_countries);
+        FrameLayout frameLayoutPlanets = rootView.findViewById(R.id.frame_layout_planets);
 
+        // Add buttons dynamically to the respective lists
+        addButtonList(frameLayoutAnimals, animals);
+        addButtonList(frameLayoutCountries, countries);
+        addButtonList(frameLayoutPlanets, planets);
+
+        return rootView;
+    }
+
+    private void addButtonList(FrameLayout frameLayout, String[] items) {
         // Define initial top margin
         int marginTop = 10;
 
         // Loop through the button labels and create buttons dynamically
-        for (String label : buttonLabels) {
+        for (String label : items) {
             Button button = new Button(getActivity());
             button.setText(label);
             button.setLayoutParams(new FrameLayout.LayoutParams(
@@ -69,7 +82,5 @@ public class ThemesFragment extends Fragment {
             // Add the button to the frame layout
             frameLayout.addView(button);
         }
-
-        return rootView;
     }
 }
