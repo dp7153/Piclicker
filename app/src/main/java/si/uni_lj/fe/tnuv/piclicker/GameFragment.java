@@ -20,6 +20,7 @@ public class GameFragment extends Fragment {
     private TextView textViewCookies;
     private static final String PREFS_NAME = "MyPrefs";
     private static final String COOKIES_KEY = "cookies";
+    private static final String SELECTED_BUTTON_KEY = "selected_button";
 
     @Nullable
     @Override
@@ -34,6 +35,12 @@ public class GameFragment extends Fragment {
         SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         cookies = preferences.getInt(COOKIES_KEY, 0);
         updateCookiesDisplay();
+
+        // Retrieve the last selected button information from SharedPreferences
+        String lastSelectedButton = preferences.getString(SELECTED_BUTTON_KEY, "Koala");
+        int lastSelectedImage = getImageResource(lastSelectedButton);
+        // Set the ImageButton with the last selected image
+        btnClick.setImageResource(lastSelectedImage);
 
         btnClick.setOnClickListener(v -> {
             // Increase the number of cookies and update the TextView
@@ -54,6 +61,11 @@ public class GameFragment extends Fragment {
 
             // Update the ImageButton with the selected image
             btnClick.setImageResource(imageResource);
+
+            // Save the selected button to SharedPreferences
+            SharedPreferences.Editor editor = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+            editor.putString(SELECTED_BUTTON_KEY, selectedButton);
+            editor.apply();
         }
 
         return rootView;

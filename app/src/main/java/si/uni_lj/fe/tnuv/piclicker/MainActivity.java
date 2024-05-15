@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         //setContentView(R.layout.activity_main);
 
-        replaceFragment(new AccountFragment());
+        replaceFragment(new GameFragment());
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
