@@ -170,10 +170,10 @@ public class ShopFragment extends Fragment {
 
     // Method to update the displayed UI
     private void updateUI() {
-        cookiesTextView.setText("Cookies: " + cookies);
-        productionBeltCountTextView.setText("Production Belt: " + productionBeltCount);
-        workerCountTextView.setText("Worker: " + workerCount);
-        factoryCountTextView.setText("Factory: " + factoryCount);
+        cookiesTextView.setText("Clicks: " + cookies);
+        productionBeltCountTextView.setText("Owned: " + productionBeltCount);
+        workerCountTextView.setText("Owned: " + workerCount);
+        factoryCountTextView.setText("Owned: " + factoryCount);
     }
 
     // Method to save data to SharedPreferences
