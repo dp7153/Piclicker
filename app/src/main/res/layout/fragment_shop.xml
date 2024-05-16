@@ -6,31 +6,58 @@
     tools:context=".ShopFragment">
 
     <TextView
+        android:id="@+id/productionBeltCountTextDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+1 click every 10 seconds"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/productionBeltCountTextView"
+        android:layout_marginTop="300dp"/>
+
+    <TextView
         android:id="@+id/productionBeltCountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Production Belt: 0"
+        android:text="Owned: 0"
         android:layout_gravity="center_horizontal"
         android:layout_below="@id/btn_production_belt"
-        android:layout_marginTop="300dp"/>
+        android:layout_marginTop="315dp"/>
+
+    <TextView
+        android:id="@+id/WorkerCountDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+2 clicks every 15 seconds"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/workerCountTextView"
+        android:layout_marginTop="385dp"/>
 
     <TextView
         android:id="@+id/workerCountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Worker: 0"
+        android:text="Owned: 0"
         android:layout_gravity="center_horizontal"
         android:layout_below="@id/btn_worker"
-        android:layout_marginTop="370dp"/>
+        android:layout_marginTop="400dp"/>
+
+    <TextView
+        android:id="@+id/FactoryCountDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+8 clicks every 30 seconds"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/factoryCountTextView"
+        android:layout_marginTop="470dp"/>
 
     <TextView
         android:id="@+id/factoryCountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Factory: 0"
+        android:text="Owned: 0"
         android:layout_gravity="center_horizontal"
         android:layout_above="@id/btn_factory"
-        android:layout_marginTop="440dp"/>
+        android:layout_marginTop="485dp"/>
 
     <!-- Button to buy Production Belt -->
     <Button
@@ -46,9 +73,9 @@
         android:id="@+id/btn_worker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_gravity="center_horizontal"
         android:text="Worker == [200 clicks]"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="340dp"/>
 
     <!-- Button to buy Factory -->
     <Button
@@ -56,7 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="395dp"
+        android:layout_marginTop="425dp"
         android:text="Factory == [500] clicks"/>
 
     <!-- TODO: Update blank fragment layout -->
@@ -71,7 +98,7 @@
         android:id="@+id/cookiesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cookies: "
+        android:text="Clicks: "
         android:textSize="18sp"
         android:layout_centerInParent="true" />
 

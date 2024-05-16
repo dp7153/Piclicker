@@ -2,6 +2,7 @@ package si.uni_lj.fe.tnuv.piclicker;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,37 @@ import static android.content.Context.MODE_PRIVATE;
 public class GameFragment extends Fragment {
 
     private int cookies = 0;
+    private int productionBeltCount = 0;
+    private int workerCount = 0;
+    private int factoryCount = 0;
     private TextView textViewCookies;
+    private Handler handler;
+    private Runnable incrementCookiesRunnable;
+
     public static final String PREFS_NAME = "MyPrefs";
     public static final String COOKIES_KEY = "cookies";
+
     private static final String SELECTED_BUTTON_KEY = "selected_button";
 
-    public String getPrefsName(){
-        return this.PREFS_NAME;
-    }
-    public String getCookiesKey(){
-        return this.COOKIES_KEY;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Load data from SharedPreferences
+        loadDataFromSharedPreferences();
+
+        // Initialize handler
+        handler = new Handler();
+
+        // Initialize Runnable to increment cookies based on owned items
+        incrementCookiesRunnable = new Runnable() {
+            @Override
+            public void run() {
+                int incrementAmount = calculateIncrement();
+                incrementCookies(incrementAmount);
+                handler.postDelayed(this, 10000); // Run every 10 second
+            }
+        };
     }
 
     @Nullable
@@ -101,7 +123,54 @@ public class GameFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Start the incrementation Runnable
+        handler.postDelayed(incrementCookiesRunnable, 10000); // Start after 10 seconds
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Stop the incrementation Runnable
+        handler.removeCallbacks(incrementCookiesRunnable);
+    }
+
+    // Calculate the increment based on owned items
+    private int calculateIncrement() {
+        // Add up the total increment from owned items
+
+
+        return productionBeltCount * 1 + workerCount * 2 + factoryCount * 8;
+    }
+
+    // Update the cookies count and display
+    private void incrementCookies(int amount) {
+        cookies += amount;
+        updateCookiesDisplay();
+        saveDataToSharedPreferences();
+    }
+
+    // Update the cookies display
     private void updateCookiesDisplay() {
         textViewCookies.setText("Clicks: " + cookies);
+    }
+
+    // Save data to SharedPreferences
+    private void saveDataToSharedPreferences() {
+        SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(COOKIES_KEY, cookies);
+        editor.apply();
+    }
+
+    // Load data from SharedPreferences
+    private void loadDataFromSharedPreferences() {
+        SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        cookies = preferences.getInt(COOKIES_KEY, 0);
+        productionBeltCount = preferences.getInt("productionBeltCount", 0);
+        workerCount = preferences.getInt("workerCount", 0);
+        factoryCount = preferences.getInt("factoryCount", 0);
     }
 }
