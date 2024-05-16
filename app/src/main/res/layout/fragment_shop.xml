@@ -13,4 +13,12 @@
         android:textSize="26dp"
         android:layout_gravity="center"/>
 
+    <TextView
+        android:id="@+id/cookiesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cookies: "
+        android:textSize="18sp"
+        android:layout_centerInParent="true" />
+
 </FrameLayout>

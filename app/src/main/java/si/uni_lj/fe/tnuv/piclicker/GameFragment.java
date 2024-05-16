@@ -19,8 +19,15 @@ public class GameFragment extends Fragment {
     private int cookies = 0;
     private TextView textViewCookies;
     private static final String PREFS_NAME = "MyPrefs";
-    private static final String COOKIES_KEY = "cookies";
+    public static final String COOKIES_KEY = "cookies";
     private static final String SELECTED_BUTTON_KEY = "selected_button";
+
+    public String getPrefsName(){
+        return this.PREFS_NAME;
+    }
+    public String getCookiesKey(){
+        return this.COOKIES_KEY;
+    }
 
     @Nullable
     @Override
@@ -34,6 +41,7 @@ public class GameFragment extends Fragment {
         // Load cookies count from SharedPreferences
         SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         cookies = preferences.getInt(COOKIES_KEY, 0);
+
         updateCookiesDisplay();
 
         // Retrieve the last selected button information from SharedPreferences
@@ -67,6 +75,7 @@ public class GameFragment extends Fragment {
             editor.putString(SELECTED_BUTTON_KEY, selectedButton);
             editor.apply();
         }
+
 
         return rootView;
     }

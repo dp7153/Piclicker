@@ -28,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-
-            if (itemId == R.id.account) {
+            if (itemId == R.id.game) {
+                replaceFragment(new GameFragment());
+            }
+            else if (itemId == R.id.account) {
                 replaceFragment(new AccountFragment());
             }
             else if (itemId == R.id.facts) {
@@ -51,5 +53,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+    public void selectGameMenuItem() {
+        binding.bottomNavigationView.setSelectedItemId(R.id.game);
+    }
+
 
 }

@@ -1,14 +1,12 @@
 package si.uni_lj.fe.tnuv.piclicker;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import androidx.fragment.app.Fragment;
 
 public class ThemesFragment extends Fragment {
 
@@ -76,6 +74,9 @@ public class ThemesFragment extends Fragment {
                             .replace(R.id.frame_layout, gameFragment)
                             .addToBackStack(null)
                             .commit();
+
+                    // Select the "Game" item in the bottom navigation menu
+                    ((MainActivity) getActivity()).selectGameMenuItem();
                 }
             });
 
