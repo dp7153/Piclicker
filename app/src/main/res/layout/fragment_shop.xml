@@ -5,13 +5,67 @@
     android:layout_height="match_parent"
     tools:context=".ShopFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/productionBeltCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Production Belt: 0"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/btn_production_belt"
+        android:layout_marginTop="300dp"/>
+
+    <TextView
+        android:id="@+id/workerCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Worker: 0"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@id/btn_worker"
+        android:layout_marginTop="370dp"/>
+
+    <TextView
+        android:id="@+id/factoryCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Factory: 0"
+        android:layout_gravity="center_horizontal"
+        android:layout_above="@id/btn_factory"
+        android:layout_marginTop="440dp"/>
+
+    <!-- Button to buy Production Belt -->
+    <Button
+        android:id="@+id/btn_production_belt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Production Belt == [5 clicks]"
+        android:layout_marginTop="255dp"/>
+
+    <!-- Button to buy Worker -->
+    <Button
+        android:id="@+id/btn_worker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:text="Worker == [200 clicks]"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Button to buy Factory -->
+    <Button
+        android:id="@+id/btn_factory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="395dp"
+        android:text="Factory == [500] clicks"/>
+
+    <!-- TODO: Update blank fragment layout -->
+    <!-- <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Shop"
         android:textSize="26dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"/>-->
 
     <TextView
         android:id="@+id/cookiesTextView"

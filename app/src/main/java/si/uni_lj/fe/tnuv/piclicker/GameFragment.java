@@ -18,7 +18,7 @@ public class GameFragment extends Fragment {
 
     private int cookies = 0;
     private TextView textViewCookies;
-    private static final String PREFS_NAME = "MyPrefs";
+    public static final String PREFS_NAME = "MyPrefs";
     public static final String COOKIES_KEY = "cookies";
     private static final String SELECTED_BUTTON_KEY = "selected_button";
 
