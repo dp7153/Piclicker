@@ -1,6 +1,7 @@
 package si.uni_lj.fe.tnuv.piclicker;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,9 +66,13 @@ public class ThemesFragment extends Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("selected_button", buttonText);
+                    Log.d("ThemesFragment", "Bundle created with button text: " + buttonText); // Add this line for debug logging
 
                     GameFragment gameFragment = new GameFragment();
                     gameFragment.setArguments(bundle);
+
+                    FactsFragment factsFragment = new FactsFragment();
+                    factsFragment.setArguments(bundle);
 
                     getActivity().getSupportFragmentManager()
                             .beginTransaction()

@@ -3,6 +3,7 @@ package si.uni_lj.fe.tnuv.piclicker;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,20 +103,48 @@ public class GameFragment extends Fragment {
         return rootView;
     }
 
+    private int factNo = 5;
+
+    public int getFactNo() {
+        Log.d("facts", "getter: " + String.valueOf(factNo));
+        return factNo;
+    }
+    private void setFactNo(int index){
+        this.factNo = index;
+        Log.d("facts", "setter: " + String.valueOf(factNo));
+    }
+
+    private GameFragment gameFragment;
+    public GameFragment pass(){
+        return this.gameFragment;
+    }
+
     // Method to map button text to image resource
     private int getImageResource(String buttonText) {
         switch (buttonText) {
             case "Koala":
+                //factNo = 1;
+                setFactNo(1);
+                getFactNo();
+                Log.d("Facts", "koala: " + String.valueOf(factNo));
                 return R.drawable.koala;
             case "Slovenia":
+                //factNo = 2;
+                setFactNo(2);
+                getFactNo();
+                Log.d("Facts", "Slovenija: " + String.valueOf(factNo));
                 return R.drawable.slovenia;
             case "Pluto":
+                factNo = 3;
                 return R.drawable.pluto;
             case "Mars":
+                factNo = 4;
                 return R.drawable.mars;
             case "Bear":
+                factNo = 5;
                 return R.drawable.bear;
             case "Austria":
+                factNo = 6;
                 return R.drawable.austria;
 
             default:
