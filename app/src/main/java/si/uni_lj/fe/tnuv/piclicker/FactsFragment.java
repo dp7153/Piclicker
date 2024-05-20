@@ -10,11 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class FactsFragment extends Fragment {
 
     private TextView textViewFacts;
+    private int factNo;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        loadFactNoFromSharedPreferences();
+    }
+    private void loadFactNoFromSharedPreferences() {
+        SharedPreferences preferences = getActivity().getSharedPreferences(GameFragment.PREFS_NAME, MODE_PRIVATE);
+        factNo = preferences.getInt(GameFragment.FACT_NO_KEY, 1); // Default to 1 if not found
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,8 +45,6 @@ public class FactsFragment extends Fragment {
             textViewFacts.setText(factsForImage);
         }*/
         GameFragment gf = new GameFragment();
-        //gf = gf.pass();
-        int factNo = gf.getFactNo();
         Log.d("Facts", String.valueOf(factNo));
         textViewFacts.setText(getFactsForImage(factNo));
 
@@ -48,7 +58,14 @@ public class FactsFragment extends Fragment {
                 return "Koale so mnoge živali";
             case 2:
                 return "Slovenija od kod lepote tvoje";
-            // Add cases for other images
+            case 3:
+                return "Pluto je najmanši planet";
+            case 4:
+                return "Mars je rdeči planet";
+            case 5:
+                return "Medved je velika zver";
+            case 6:
+                return "Avstrija je velika dežela";
             default:
                 return "Ni informacij";
         }

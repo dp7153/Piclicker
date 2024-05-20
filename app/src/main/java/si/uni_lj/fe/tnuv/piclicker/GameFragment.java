@@ -25,16 +25,17 @@ public class GameFragment extends Fragment {
     private TextView textViewCookies;
     private Handler handler;
     private Runnable incrementCookiesRunnable;
+    public static final String FACT_NO_KEY = "fact_no";
 
     public static final String PREFS_NAME = "MyPrefs";
     public static final String COOKIES_KEY = "cookies";
 
-    private static final String SELECTED_BUTTON_KEY = "selected_button";
+    public static final String SELECTED_BUTTON_KEY = "selected_button";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //Log.d("Stevilka facta:", "Fact" + String.valueOf(SELECTED_BUTTON_KEY));
         // Load data from SharedPreferences
         loadDataFromSharedPreferences();
 
@@ -103,51 +104,43 @@ public class GameFragment extends Fragment {
         return rootView;
     }
 
-    private int factNo = 5;
-
-    public int getFactNo() {
-        Log.d("facts", "getter: " + String.valueOf(factNo));
-        return factNo;
-    }
-    private void setFactNo(int index){
-        this.factNo = index;
-        Log.d("facts", "setter: " + String.valueOf(factNo));
-    }
+    public int factNo = 1;
 
     private GameFragment gameFragment;
-    public GameFragment pass(){
-        return this.gameFragment;
+    private void setFactNo(int index) {
+        this.factNo = index;
+        Log.d("facts", "setter: " + factNo);
+
+        // Save factNo to SharedPreferences
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putInt(FACT_NO_KEY, factNo);
+        editor.apply();
     }
 
     // Method to map button text to image resource
     private int getImageResource(String buttonText) {
         switch (buttonText) {
             case "Koala":
-                //factNo = 1;
                 setFactNo(1);
-                getFactNo();
-                Log.d("Facts", "koala: " + String.valueOf(factNo));
                 return R.drawable.koala;
             case "Slovenia":
-                //factNo = 2;
                 setFactNo(2);
-                getFactNo();
-                Log.d("Facts", "Slovenija: " + String.valueOf(factNo));
                 return R.drawable.slovenia;
             case "Pluto":
-                factNo = 3;
+                setFactNo(3);
                 return R.drawable.pluto;
             case "Mars":
-                factNo = 4;
+                setFactNo(4);
                 return R.drawable.mars;
             case "Bear":
-                factNo = 5;
+                setFactNo(5);
                 return R.drawable.bear;
             case "Austria":
-                factNo = 6;
+                setFactNo(6);
                 return R.drawable.austria;
 
             default:
+                setFactNo(1);
                 return R.drawable.koala; // Default image
         }
     }
@@ -201,5 +194,6 @@ public class GameFragment extends Fragment {
         productionBeltCount = preferences.getInt("productionBeltCount", 0);
         workerCount = preferences.getInt("workerCount", 0);
         factoryCount = preferences.getInt("factoryCount", 0);
+        factNo = preferences.getInt(FACT_NO_KEY, 1);
     }
 }

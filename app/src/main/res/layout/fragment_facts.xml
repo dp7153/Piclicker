@@ -5,13 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".FactsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/textViewFacts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="facts"
-        android:textSize="26dp"
-        android:layout_gravity="center"/>
+        android:text=""
+        android:textSize="26sp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:padding="16dp"/>
 
 </FrameLayout>
