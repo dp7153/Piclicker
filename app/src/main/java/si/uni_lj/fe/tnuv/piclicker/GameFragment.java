@@ -1,18 +1,24 @@
 package si.uni_lj.fe.tnuv.piclicker;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.io.File;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -31,11 +37,13 @@ public class GameFragment extends Fragment {
     public static final String COOKIES_KEY = "cookies";
 
     public static final String SELECTED_BUTTON_KEY = "selected_button";
+    public static final String CUSTOM_IMAGES_KEY = "custom_images";
+
+    private LruCache<String, Bitmap> memoryCache;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Log.d("Stevilka facta:", "Fact" + String.valueOf(SELECTED_BUTTON_KEY));
         // Load data from SharedPreferences
         loadDataFromSharedPreferences();
 
@@ -48,7 +56,17 @@ public class GameFragment extends Fragment {
             public void run() {
                 int incrementAmount = calculateIncrement();
                 incrementCookies(incrementAmount);
-                handler.postDelayed(this, 10000); // Run every 10 second
+                handler.postDelayed(this, 10000); // Run every 10 seconds
+            }
+        };
+
+        // Initialize the memory cache
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / 8;
+        memoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
             }
         };
     }
@@ -70,9 +88,7 @@ public class GameFragment extends Fragment {
 
         // Retrieve the last selected button information from SharedPreferences
         String lastSelectedButton = preferences.getString(SELECTED_BUTTON_KEY, "Koala");
-        int lastSelectedImage = getImageResource(lastSelectedButton);
-        // Set the ImageButton with the last selected image
-        btnClick.setImageResource(lastSelectedImage);
+        setButtonImage(btnClick, lastSelectedButton);
 
         btnClick.setOnClickListener(v -> {
             // Increase the number of cookies and update the TextView
@@ -89,17 +105,13 @@ public class GameFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             String selectedButton = bundle.getString("selected_button");
-            int imageResource = getImageResource(selectedButton);
-
-            // Update the ImageButton with the selected image
-            btnClick.setImageResource(imageResource);
+            setButtonImage(btnClick, selectedButton);
 
             // Save the selected button to SharedPreferences
             SharedPreferences.Editor editor = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
             editor.putString(SELECTED_BUTTON_KEY, selectedButton);
             editor.apply();
         }
-
 
         return rootView;
     }
@@ -114,6 +126,28 @@ public class GameFragment extends Fragment {
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
         editor.putInt(FACT_NO_KEY, factNo);
         editor.apply();
+    }
+
+    // Method to get the custom image file path
+    private File getCustomImageFile(String imageName) {
+        return new File(getActivity().getFilesDir(), imageName);
+    }
+
+    // Method to set the button image
+    private void setButtonImage(ImageButton btnClick, String buttonText) {
+        File customImageFile = getCustomImageFile(buttonText);
+        if (customImageFile.exists()) {
+            Bitmap customImage = getBitmapFromMemCache(buttonText);
+            if (customImage == null) {
+                customImage = BitmapFactory.decodeFile(customImageFile.getAbsolutePath());
+                addBitmapToMemoryCache(buttonText, customImage);
+            }
+            btnClick.setImageBitmap(customImage);
+            setFactNo(0);
+        } else {
+            int imageResource = getImageResource(buttonText);
+            btnClick.setImageResource(imageResource);
+        }
     }
 
     // Method to map button text to image resource
@@ -137,7 +171,6 @@ public class GameFragment extends Fragment {
             case "Austria":
                 setFactNo(6);
                 return R.drawable.austria;
-
             default:
                 setFactNo(1);
                 return R.drawable.koala; // Default image
@@ -161,8 +194,6 @@ public class GameFragment extends Fragment {
     // Calculate the increment based on owned items
     private int calculateIncrement() {
         // Add up the total increment from owned items
-
-
         return productionBeltCount * 1 + workerCount * 2 + factoryCount * 8;
     }
 
@@ -194,5 +225,17 @@ public class GameFragment extends Fragment {
         workerCount = preferences.getInt("workerCount", 0);
         factoryCount = preferences.getInt("factoryCount", 0);
         factNo = preferences.getInt(FACT_NO_KEY, 1);
+    }
+
+    // Add bitmap to memory cache
+    private void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            memoryCache.put(key, bitmap);
+        }
+    }
+
+    // Get bitmap from memory cache
+    private Bitmap getBitmapFromMemCache(String key) {
+        return memoryCache.get(key);
     }
 }

@@ -66,5 +66,46 @@
             <!-- Buttons for Planets will be added dynamically here -->
 
         </FrameLayout>
+
+        <TextView
+            android:id="@+id/custom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
+
+
+        <FrameLayout
+            android:id="@+id/frame_layout_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+        </FrameLayout>
+
+        <!-- Horizontal LinearLayout to place buttons side by side -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_add_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Image"/>
+
+            <Button
+                android:id="@+id/button_clear_images"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear All"
+                android:layout_marginStart="16dp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
