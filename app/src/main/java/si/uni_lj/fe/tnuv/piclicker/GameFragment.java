@@ -104,9 +104,8 @@ public class GameFragment extends Fragment {
         return rootView;
     }
 
-    public int factNo = 1;
+    public int factNo = 0;
 
-    private GameFragment gameFragment;
     private void setFactNo(int index) {
         this.factNo = index;
         Log.d("facts", "setter: " + factNo);
