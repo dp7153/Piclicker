@@ -1,94 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frame_layout"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ThemesFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <!-- <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />-->
-
-   <!-- <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Themes"
-        android:textSize="26dp"
-        android:layout_gravity="center"/> -->
-
-    <!-- <Button
-        android:id="@+id/GameButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Koala" /> -->
-
-    <TextView
-        android:id="@+id/title_animals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Animals"
-        android:textSize="20sp"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"/>
-
-    <!-- FrameLayout for Animals -->
-
-    <FrameLayout
-        android:id="@+id/frame_layout_animals"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:orientation="vertical">
 
-        <!-- Buttons for Animals will be added dynamically here -->
+        <TextView
+            android:id="@+id/title_animals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Animals"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
 
-    </FrameLayout>
+        <!-- FrameLayout for Animals -->
+        <FrameLayout
+            android:id="@+id/frame_layout_animals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
-    <TextView
-        android:id="@+id/title_countries"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Countries"
-        android:textSize="20sp"
-        android:layout_marginTop="115dp"
-        android:layout_centerHorizontal="true"/>
+            <!-- Buttons for Animals will be added dynamically here -->
 
-    <!-- FrameLayout for Countries -->
-    <FrameLayout
-        android:id="@+id/frame_layout_countries"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/frame_layout_animals"
-        android:layout_marginTop="20dp">
+        </FrameLayout>
 
-        <!-- Buttons for Countries will be added dynamically here -->
+        <TextView
+            android:id="@+id/title_countries"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Countries"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
 
-    </FrameLayout>
+        <!-- FrameLayout for Countries -->
+        <FrameLayout
+            android:id="@+id/frame_layout_countries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
-    <TextView
-        android:id="@+id/title_planets"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Planets"
-        android:textSize="20sp"
-        android:layout_marginTop="225dp"
-        android:layout_centerHorizontal="true"/>
+            <!-- Buttons for Countries will be added dynamically here -->
 
-    <!-- FrameLayout for Planets -->
-    <FrameLayout
-        android:id="@+id/frame_layout_planets"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/frame_layout_countries"
-        android:layout_marginTop="20dp">
+        </FrameLayout>
 
-        <!-- Buttons for Planets will be added dynamically here -->
+        <TextView
+            android:id="@+id/title_planets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Planets"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
 
-    </FrameLayout>
+        <!-- FrameLayout for Planets -->
+        <FrameLayout
+            android:id="@+id/frame_layout_planets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
 
+            <!-- Buttons for Planets will be added dynamically here -->
 
-</RelativeLayout>
-
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>
