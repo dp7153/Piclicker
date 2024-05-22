@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
+import android.app.AlertDialog;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -40,6 +42,8 @@ public class ThemesFragment extends Fragment {
 
     private Set<String> customImages;
     private LruCache<String, Bitmap> memoryCache;
+
+    private String imageName;
 
     public ThemesFragment() {
         // Required empty public constructor
@@ -91,15 +95,35 @@ public class ThemesFragment extends Fragment {
         // Set up the "Add Image" and "Clear Images" buttons
         Button addImageButton = rootView.findViewById(R.id.button_add_image);
         Button clearImagesButton = rootView.findViewById(R.id.button_clear_images);
-        addImageButton.setOnClickListener(v -> onAddImageButtonClick());
+        addImageButton.setOnClickListener(v -> showImageNameDialog());
         clearImagesButton.setOnClickListener(v -> onClearImagesButtonClick(frameLayoutCustom));
 
         return rootView;
     }
 
-    private void onAddImageButtonClick() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    private void showImageNameDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_image_name, null);
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+
+        EditText editTextImageName = dialogView.findViewById(R.id.edit_text_image_name);
+        Button buttonConfirm = dialogView.findViewById(R.id.button_confirm);
+
+        buttonConfirm.setOnClickListener(v -> {
+            imageName = editTextImageName.getText().toString().trim();
+            if (!imageName.isEmpty()) {
+                dialog.dismiss();
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+            } else {
+                Toast.makeText(getActivity(), "Please enter an image name", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
     }
 
     private void onClearImagesButtonClick(FrameLayout frameLayoutCustom) {
@@ -154,7 +178,7 @@ public class ThemesFragment extends Fragment {
                 InputStream inputStream = getActivity().getContentResolver().openInputStream(imageUri);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 inputStream.close();
-                String filename = "image_" + System.currentTimeMillis() + ".png";
+                String filename = imageName;/*"image_" + System.currentTimeMillis() + ".png"*/;
                 FileOutputStream stream = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 stream.close();
