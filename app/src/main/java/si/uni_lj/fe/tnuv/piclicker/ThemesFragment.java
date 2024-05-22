@@ -250,10 +250,17 @@ public class ThemesFragment extends Fragment {
                 FrameLayout.LayoutParams.WRAP_CONTENT));
         button.setText(imageName);
 
+        // Calculate and set the top margin for this button
+        int buttonCount = frameLayoutCustom.getChildCount();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) button.getLayoutParams();
+        params.topMargin = buttonCount * 100; // Adjust based on the required spacing
+        button.setLayoutParams(params);
+
         button.setOnClickListener(v -> onThemeButtonClick(imageName));
 
         frameLayoutCustom.addView(button);
     }
+
 
 
     // Add bitmap to memory cache
