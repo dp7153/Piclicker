@@ -143,7 +143,7 @@ public class GameFragment extends Fragment {
                 addBitmapToMemoryCache(buttonText, customImage);
             }
             btnClick.setImageBitmap(customImage);
-            setFactNo(0);
+            setFactNo(7);
         } else {
             int imageResource = getImageResource(buttonText);
             btnClick.setImageResource(imageResource);
