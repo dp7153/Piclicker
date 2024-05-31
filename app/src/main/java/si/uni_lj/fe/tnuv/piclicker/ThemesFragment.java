@@ -34,6 +34,8 @@ import android.app.AlertDialog;
 
 import static android.app.Activity.RESULT_OK;
 
+import com.google.android.material.snackbar.Snackbar;
+
 public class ThemesFragment extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -95,13 +97,17 @@ public class ThemesFragment extends Fragment {
         // Set up the "Add Image" and "Clear Images" buttons
         Button addImageButton = rootView.findViewById(R.id.button_add_image);
         Button clearImagesButton = rootView.findViewById(R.id.button_clear_images);
-        addImageButton.setOnClickListener(v -> showImageNameDialog());
+        //addImageButton.setOnClickListener(v -> showImageNameDialog());
+        addImageButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        });
         clearImagesButton.setOnClickListener(v -> onClearImagesButtonClick(frameLayoutCustom));
 
         return rootView;
     }
 
-    private void showImageNameDialog() {
+    private void showImageNameDialog(Uri imageUri) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_image_name, null);
@@ -116,8 +122,7 @@ public class ThemesFragment extends Fragment {
             imageName = editTextImageName.getText().toString().trim();
             if (!imageName.isEmpty()) {
                 dialog.dismiss();
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+                saveImageToAppStorage(imageUri);
             } else {
                 Toast.makeText(getActivity(), "Please enter an image name", Toast.LENGTH_SHORT).show();
             }
@@ -125,6 +130,7 @@ public class ThemesFragment extends Fragment {
 
         dialog.show();
     }
+
 
     private void onClearImagesButtonClick(FrameLayout frameLayoutCustom) {
         SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -135,6 +141,9 @@ public class ThemesFragment extends Fragment {
         customImages.clear();
         frameLayoutCustom.removeAllViews();
         Toast.makeText(getActivity(), "All custom images removed", Toast.LENGTH_SHORT).show();
+
+        //changes back to koala and goes to GameFragment
+        //onThemeButtonClick("Koala");
     }
 
     @Override
@@ -143,9 +152,10 @@ public class ThemesFragment extends Fragment {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImageUri = data.getData();
-            saveImageToAppStorage(selectedImageUri);
+            showImageNameDialog(selectedImageUri);
         }
     }
+
 
     /*private void saveImageToAppStorage(Uri imageUri) {
         try {
@@ -172,32 +182,62 @@ public class ThemesFragment extends Fragment {
         }
     }*/
 
+    private AlertDialog loadingDialog;
+
+    private void showLoadingDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_loading, null);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+
+        loadingDialog = builder.create();
+        loadingDialog.show();
+    }
+
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+    }
+
     private void saveImageToAppStorage(Uri imageUri) {
+        showLoadingDialog(); // Show the loading dialog
         new Thread(() -> {
             try {
                 InputStream inputStream = getActivity().getContentResolver().openInputStream(imageUri);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 inputStream.close();
-                String filename = imageName;/*"image_" + System.currentTimeMillis() + ".png"*/;
+                String filename = imageName;
                 FileOutputStream stream = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 stream.close();
 
                 getActivity().runOnUiThread(() -> {
-                    customImages.add(filename);
-                    SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putStringSet(CUSTOM_IMAGES_KEY, customImages);
-                    editor.apply();
+                    // Check if the fragment is still attached to the activity
+                    if (isAdded()) {
+                        customImages.add(filename);
+                        SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putStringSet(CUSTOM_IMAGES_KEY, customImages);
+                        editor.apply();
 
-                    FrameLayout frameLayoutCustom = getView().findViewById(R.id.frame_layout_custom);
-                    addCustomImageButton(frameLayoutCustom, filename);
+                        FrameLayout frameLayoutCustom = getView().findViewById(R.id.frame_layout_custom);
+                        addCustomImageButton(frameLayoutCustom, filename);
 
-                    Toast.makeText(getActivity(), "Image added successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Image added successfully", Toast.LENGTH_SHORT).show();
+                        onThemeButtonClick(filename);
+                    }
+                    hideLoadingDialog(); // Hide the loading dialog
                 });
             } catch (IOException e) {
                 e.printStackTrace();
-                getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Failed to load image", Toast.LENGTH_SHORT).show());
+                getActivity().runOnUiThread(() -> {
+                    if (isAdded()) {
+                        Toast.makeText(getActivity(), "Failed to load image", Toast.LENGTH_SHORT).show();
+                    }
+                    hideLoadingDialog(); // Hide the loading dialog in case of error
+                });
             }
         }).start();
     }
