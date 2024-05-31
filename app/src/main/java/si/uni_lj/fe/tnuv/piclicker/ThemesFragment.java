@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import android.app.AlertDialog;
@@ -70,15 +71,17 @@ public class ThemesFragment extends Fragment {
         customImages = preferences.getStringSet(CUSTOM_IMAGES_KEY, new HashSet<>());
     }
 
+    // Create arrays of button labels for each list
+    private String[] animals = {"Koala", "Bear"};
+    private String[] countries = {"Austria", "Slovenia"};
+    private String[] planets = {"Mars", "Pluto"};
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_themes, container, false);
 
-        // Create arrays of button labels for each list
-        String[] animals = {"Koala", "Bear"};
-        String[] countries = {"Austria", "Slovenia"};
-        String[] planets = {"Mars", "Pluto"};
+
 
         // Get the frame layouts to add buttons dynamically
         FrameLayout frameLayoutAnimals = rootView.findViewById(R.id.frame_layout_animals);
@@ -136,7 +139,14 @@ public class ThemesFragment extends Fragment {
         SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(CUSTOM_IMAGES_KEY);
-        editor.putString("selected_button", "Koala");
+        // Check if the currently selected button is not in the predetermined values list
+        String selectedButton = preferences.getString("selected_button", "");
+        if (!Arrays.asList(animals).contains(selectedButton) &&
+                !Arrays.asList(countries).contains(selectedButton) &&
+                !Arrays.asList(planets).contains(selectedButton)) {
+            // Change the selected_button value to a default value, e.g., "Koala"
+            editor.putString("selected_button", "Koala");
+        }
         editor.apply();
 
         customImages.clear();
@@ -202,7 +212,7 @@ public class ThemesFragment extends Fragment {
         }
     }
 
-    private void saveImageToAppStorage(Uri imageUri) {
+    /*private void saveImageToAppStorage(Uri imageUri) {
         showLoadingDialog(); // Show the loading dialog
         new Thread(() -> {
             try {
@@ -231,6 +241,60 @@ public class ThemesFragment extends Fragment {
                     }
                     hideLoadingDialog(); // Hide the loading dialog
                 });
+            } catch (IOException e) {
+                e.printStackTrace();
+                getActivity().runOnUiThread(() -> {
+                    if (isAdded()) {
+                        Toast.makeText(getActivity(), "Failed to load image", Toast.LENGTH_SHORT).show();
+                    }
+                    hideLoadingDialog(); // Hide the loading dialog in case of error
+                });
+            }
+        }).start();
+    }*/
+
+    private void saveImageToAppStorage(Uri imageUri) {
+        showLoadingDialog(); // Show the loading dialog
+        new Thread(() -> {
+            try {
+                InputStream inputStream = getActivity().getContentResolver().openInputStream(imageUri);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                inputStream.close();
+                String filename = imageName;
+
+                // Check if the filename already exists in predetermined themes or custom themes
+                if (!Arrays.asList(animals).contains(filename) &&
+                        !Arrays.asList(countries).contains(filename) &&
+                        !Arrays.asList(planets).contains(filename) &&
+                        !customImages.contains(filename)) {
+                    FileOutputStream stream = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    stream.close();
+
+                    getActivity().runOnUiThread(() -> {
+                        // Check if the fragment is still attached to the activity
+                        if (isAdded()) {
+                            customImages.add(filename);
+                            SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putStringSet(CUSTOM_IMAGES_KEY, customImages);
+                            editor.apply();
+
+                            FrameLayout frameLayoutCustom = getView().findViewById(R.id.frame_layout_custom);
+                            addCustomImageButton(frameLayoutCustom, filename);
+
+                            Toast.makeText(getActivity(), "Image added successfully", Toast.LENGTH_SHORT).show();
+                            onThemeButtonClick(filename);
+                        }
+                        hideLoadingDialog(); // Hide the loading dialog
+                    });
+                } else {
+                    getActivity().runOnUiThread(() -> {
+                        // Show a toast message indicating that the image name already exists
+                        Toast.makeText(getActivity(), "The image name already exists, please choose a different name.", Toast.LENGTH_SHORT).show();
+                        hideLoadingDialog(); // Hide the loading dialog
+                    });
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 getActivity().runOnUiThread(() -> {
