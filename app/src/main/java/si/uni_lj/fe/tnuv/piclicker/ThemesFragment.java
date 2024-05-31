@@ -136,6 +136,7 @@ public class ThemesFragment extends Fragment {
         SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove(CUSTOM_IMAGES_KEY);
+        editor.putString("selected_button", "Koala");
         editor.apply();
 
         customImages.clear();
