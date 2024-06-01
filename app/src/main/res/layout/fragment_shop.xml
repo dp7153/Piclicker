@@ -27,7 +27,7 @@
         android:id="@+id/WorkerCountDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+2 clicks every 15 seconds"
+        android:text="+2 clicks every 30 seconds"
         android:layout_gravity="center_horizontal"
         android:layout_below="@id/workerCountTextView"
         android:layout_marginTop="385dp"/>
@@ -98,8 +98,10 @@
         android:id="@+id/cookiesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clicks: "
-        android:textSize="18sp"
+        android:layout_gravity="center_horizontal"
+        android:text=""
+        android:textSize="72dp"
+        android:layout_marginTop="75dp"
         android:layout_centerInParent="true" />
 
 </FrameLayout>

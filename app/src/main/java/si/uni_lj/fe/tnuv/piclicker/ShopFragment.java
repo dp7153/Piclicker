@@ -3,6 +3,7 @@ package si.uni_lj.fe.tnuv.piclicker;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +29,8 @@ public class ShopFragment extends Fragment {
     private int workerCount = 0;
     private int factoryCount = 0;
 
-    private Handler handler;
-    private Runnable productionBeltRunnable;
-    private Runnable workerRunnable;
-    private Runnable factoryRunnable;
+    private HandlerThread handlerThread;
+    private Handler backgroundHandler;
 
     public ShopFragment() {
         // Required empty public constructor
@@ -43,33 +42,15 @@ public class ShopFragment extends Fragment {
         // Load data from SharedPreferences
         loadDataFromSharedPreferences();
 
-        // Initialize handler
-        handler = new Handler();
+        // Initialize HandlerThread and Handler
+        handlerThread = new HandlerThread("ShopBackgroundThread");
+        handlerThread.start();
+        backgroundHandler = new Handler(handlerThread.getLooper());
 
         // Initialize Runnables for each item
-        productionBeltRunnable = new Runnable() {
-            @Override
-            public void run() {
-                handler.postDelayed(this, 10000); // Run every 10 seconds
-                incrementCookies(1 * productionBeltCount); // Increment by 1 * productionBeltCount
-            }
-        };
-
-        workerRunnable = new Runnable() {
-            @Override
-            public void run() {
-                handler.postDelayed(this, 30000); // Run every 30 seconds
-                incrementCookies(2 * workerCount); // Increment by 2 * workerCount
-            }
-        };
-
-        factoryRunnable = new Runnable() {
-            @Override
-            public void run() {
-                incrementCookies(8 * factoryCount); // Increment by 8 * factoryCount
-                handler.postDelayed(this, 30000); // Run every 30 seconds
-            }
-        };
+        backgroundHandler.postDelayed(productionBeltRunnable, 10000); // Start after 10 seconds
+        backgroundHandler.postDelayed(workerRunnable, 30000); // Start after 30 seconds
+        backgroundHandler.postDelayed(factoryRunnable, 30000); // Start after 30 seconds
     }
 
     @Override
@@ -102,7 +83,7 @@ public class ShopFragment extends Fragment {
                     // Notify the user
                     Toast.makeText(getActivity(), "Production Belt purchased!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), "Not enough clicks cookies!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Not enough clicks!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -133,7 +114,7 @@ public class ShopFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (cookies >= 500) {
-                    // Deduct 1000 cookies for buying Factory
+                    // Deduct 500 cookies for buying Factory
                     cookies -= 500;
                     factoryCount++;
                     updateUI();
@@ -151,29 +132,25 @@ public class ShopFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        // Start the incrementation Runnables
-        handler.post(productionBeltRunnable);
-        handler.post(workerRunnable);
-        handler.post(factoryRunnable);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // Stop the incrementation Runnables
-        handler.removeCallbacks(productionBeltRunnable);
-        handler.removeCallbacks(workerRunnable);
-        handler.removeCallbacks(factoryRunnable);
+    public void onDestroy() {
+        super.onDestroy();
+        // Stop the HandlerThread
+        handlerThread.quitSafely();
     }
 
     // Method to update the displayed UI
     private void updateUI() {
-        cookiesTextView.setText("Clicks: " + cookies);
-        productionBeltCountTextView.setText("Owned: " + productionBeltCount);
-        workerCountTextView.setText("Owned: " + workerCount);
-        factoryCountTextView.setText("Owned: " + factoryCount);
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    cookiesTextView.setText("" + cookies);
+                    productionBeltCountTextView.setText("Owned: " + productionBeltCount);
+                    workerCountTextView.setText("Owned: " + workerCount);
+                    factoryCountTextView.setText("Owned: " + factoryCount);
+                }
+            });
+        }
     }
 
     // Method to save data to SharedPreferences
@@ -203,6 +180,32 @@ public class ShopFragment extends Fragment {
         saveDataToSharedPreferences();
     }
 
+    // Runnable for Production Belt
+    private Runnable productionBeltRunnable = new Runnable() {
+        @Override
+        public void run() {
+            incrementCookies(1 * productionBeltCount); // Increment by 1 * productionBeltCount
+            backgroundHandler.postDelayed(this, 10000); // Run every 10 seconds
+        }
+    };
+
+    // Runnable for Worker
+    private Runnable workerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            incrementCookies(2 * workerCount); // Increment by 2 * workerCount
+            backgroundHandler.postDelayed(this, 30000); // Run every 30 seconds
+        }
+    };
+
+    // Runnable for Factory
+    private Runnable factoryRunnable = new Runnable() {
+        @Override
+        public void run() {
+            incrementCookies(8 * factoryCount); // Increment by 8 * factoryCount
+            backgroundHandler.postDelayed(this, 30000); // Run every 30 seconds
+        }
+    };
 
     public interface OnCookieUpdateListener {
         void onCookieUpdate(int newCookieCount);

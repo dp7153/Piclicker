@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.text.Html;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -49,7 +50,7 @@ public class FactsFragment extends Fragment {
 
         // Display the facts for the selected button
         String factsForImage = getFactsForImage(selectedButton);
-        textViewFacts.setText(factsForImage);
+        textViewFacts.setText(Html.fromHtml(factsForImage));
 
         // Show the add fact button if the custom theme is selected
         if (selectedButton != null && !factsMap.containsKey(selectedButton)) {
@@ -60,7 +61,7 @@ public class FactsFragment extends Fragment {
                 String newFact = editTextNewFact.getText().toString().trim();
                 if (!newFact.isEmpty()) {
                     addCustomFact(selectedButton, newFact);
-                    textViewFacts.setText(getFactsForImage(selectedButton));
+                    textViewFacts.setText(Html.fromHtml(getFactsForImage(selectedButton)));
                     editTextNewFact.setText("");
                 }
             });
@@ -77,12 +78,12 @@ public class FactsFragment extends Fragment {
             return; // Prevent reinitialization
         }
 
-        factsMap.put("Koala", Arrays.asList("Koale so mnoge živali", "Koale jedo listje evkaliptusa", "Koale so lenobe"));
-        factsMap.put("Slovenia", Arrays.asList("Slovenija od kod lepote tvoje", "Ljubljana je glavno mesto Slovenije", "Triglav je najvišji vrh"));
-        factsMap.put("Pluto", Arrays.asList("Pluto je najmanši planet", "Pluto ima srce v svoji ledeni površini", "Pluto je del Kuiperjevega pasu"));
-        factsMap.put("Mars", Arrays.asList("Mars je rdeči planet", "Mars ima dve luni", "Mars je dom najvišje gore v Osončju"));
-        factsMap.put("Bear", Arrays.asList("Medved je velika zver", "Medvedi hibernirajo pozimi", "Medvedi so vsejedi"));
-        factsMap.put("Austria", Arrays.asList("Avstrija je velika dežela", "Dunaj je glavno mesto Avstrije", "Avstrija ima veliko zgodovinskih znamenitosti"));
+        factsMap.put("Koala", Arrays.asList("<b>What do I eat?</b>", "Koalas love eating eucalyptus.", "<b>Where do I live?</b>", "Koalas live in Australia and South Asia.", "<b>Anything interesting?</b>", "They sleep for up to 12 hours a day!"));
+        factsMap.put("Slovenia", Arrays.asList("<b>How big is Slovenia?</b>", "Its surface is about 20.272 square kilometers.", "<b>What's the capital?</b>", "Ljubljana", "<b>Anything interesting?</b>", "Slovenia has over 50 different dialects!"));
+        factsMap.put("Pluto", Arrays.asList("<b>Is Pluto a star or a planet?</b>", "Officially, it is a 'minor planet'.", "<b>Can humans survive on Pluto?</b>", "No, it is too cold.", "<b>Anything interesting?</b>", "Pluto has five moons!"));
+        factsMap.put("Mars", Arrays.asList("<b>Is Mars a star or a planet?</b>","A planet", "<b>Can humans survive on Mars?</b>", "Not yet, but its gravity is most similar to Earth's", "<b>Anything interesting?</b>", "There are signs of water-residue on the surface!"));
+        factsMap.put("Bear", Arrays.asList("<b>What do I eat?</b>", "Bears love fish and fruits, but they eat pretty much everything.", "<b>Where do I live?</b>", "Northern Hemisphere", "<b>Anything interesting?</b>", "I can run for up to 80 km/h!"));
+        factsMap.put("Austria", Arrays.asList("<b>How big is Austria?</b>", "Its surface is around 82.823 square kilometers.", "<b>What is the capital?</b>", "Vienna", "<b>Anything interesting?</b>", "The country is land-locked and has no access to sea!"));
 
         // Load custom facts from SharedPreferences
         SharedPreferences preferences = getActivity().getSharedPreferences(GameFragment.PREFS_NAME, MODE_PRIVATE);
@@ -113,17 +114,17 @@ public class FactsFragment extends Fragment {
 
     private String getFactsForImage(String selectedButton) {
         if (selectedButton == null) {
-            return "Ni informacij";
+            return "No information";
         }
 
         List<String> facts = factsMap.get(selectedButton);
         if (facts == null || facts.isEmpty()) {
-            return "Ni informacij";
+            return "No information";
         }
 
         StringBuilder factsBuilder = new StringBuilder();
         for (String fact : facts) {
-            factsBuilder.append(fact).append("\n");
+            factsBuilder.append(fact).append("<br>"); // Use <br> for line breaks
         }
         return factsBuilder.toString().trim();
     }
