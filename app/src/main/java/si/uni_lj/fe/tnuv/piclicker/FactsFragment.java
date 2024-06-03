@@ -78,12 +78,12 @@ public class FactsFragment extends Fragment {
             return; // Prevent reinitialization
         }
 
-        factsMap.put("Koala", Arrays.asList("<b>What do I eat?</b>", "Koalas love eating eucalyptus.", "<b>Where do I live?</b>", "Koalas live in Australia and South Asia.", "<b>Anything interesting?</b>", "They sleep for up to 12 hours a day!"));
-        factsMap.put("Slovenia", Arrays.asList("<b>How big is Slovenia?</b>", "Its surface is about 20.272 square kilometers.", "<b>What's the capital?</b>", "Ljubljana", "<b>Anything interesting?</b>", "Slovenia has over 50 different dialects!"));
-        factsMap.put("Pluto", Arrays.asList("<b>Is Pluto a star or a planet?</b>", "Officially, it is a 'minor planet'.", "<b>Can humans survive on Pluto?</b>", "No, it is too cold.", "<b>Anything interesting?</b>", "Pluto has five moons!"));
-        factsMap.put("Mars", Arrays.asList("<b>Is Mars a star or a planet?</b>","A planet", "<b>Can humans survive on Mars?</b>", "Not yet, but its gravity is most similar to Earth's", "<b>Anything interesting?</b>", "There are signs of water-residue on the surface!"));
-        factsMap.put("Bear", Arrays.asList("<b>What do I eat?</b>", "Bears love fish and fruits, but they eat pretty much everything.", "<b>Where do I live?</b>", "Northern Hemisphere", "<b>Anything interesting?</b>", "I can run for up to 80 km/h!"));
-        factsMap.put("Austria", Arrays.asList("<b>How big is Austria?</b>", "Its surface is around 82.823 square kilometers.", "<b>What is the capital?</b>", "Vienna", "<b>Anything interesting?</b>", "The country is land-locked and has no access to sea!"));
+        factsMap.put("Koala", Arrays.asList("<b>What do I eat?</b>", "Koalas love eating eucalyptus.<br>", "<b>Where do I live?</b>", "Koalas live in Australia and South Asia.<br>", "<b>Anything interesting?</b>", "They sleep for up to 12 hours a day!"));
+        factsMap.put("Slovenia", Arrays.asList("<b>How big is Slovenia?</b>", "Its surface is about 20.272 square kilometers.<br>", "<b>What's the capital?</b>", "Ljubljana.<br>", "<b>Anything interesting?</b>", "Slovenia has over 50 different dialects!"));
+        factsMap.put("Pluto", Arrays.asList("<b>Is Pluto a star or a planet?</b>", "Officially, it is a 'minor planet'.<br>", "<b>Can humans survive on Pluto?</b>", "No, it is too cold.<br>", "<b>Anything interesting?</b>", "Pluto has five moons!"));
+        factsMap.put("Mars", Arrays.asList("<b>Is Mars a star or a planet?</b>","A planet<br>", "<b>Can humans survive on Mars?</b>", "Not yet, but its gravity is most similar to Earth's.<br>", "<b>Anything interesting?</b>", "There are signs of water-residue on the surface!"));
+        factsMap.put("Bear", Arrays.asList("<b>What do I eat?</b>", "Bears love fish and fruits, but they eat pretty much everything.<br>", "<b>Where do I live?</b>", "Northern hemisphere for the most part.<br>", "<b>Anything interesting?</b>", "I can run for up to 80 km/h!"));
+        factsMap.put("Austria", Arrays.asList("<b>How big is Austria?</b>", "Its surface is around 82.823 square kilometers.<br>", "<b>What is the capital?</b>", "Vienna.<br>", "<b>Anything interesting?</b>", "The country is land-locked and has no access to sea!"));
 
         // Load custom facts from SharedPreferences
         SharedPreferences preferences = getActivity().getSharedPreferences(GameFragment.PREFS_NAME, MODE_PRIVATE);

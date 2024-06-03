@@ -73,15 +73,15 @@ public class ShopFragment extends Fragment {
         btnProductionBelt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cookies >= 5) {
+                if (cookies >= 125) {
                     // Deduct 5 cookies for buying Production Belt
-                    cookies -= 5;
+                    cookies -= 125;
                     productionBeltCount++;
                     updateUI();
                     // Save data to SharedPreferences
                     saveDataToSharedPreferences();
                     // Notify the user
-                    Toast.makeText(getActivity(), "Production Belt purchased!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Production belt purchased!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), "Not enough clicks!", Toast.LENGTH_SHORT).show();
                 }

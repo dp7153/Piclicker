@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Production Belt == [5 clicks]"
+        android:text="Production Belt == [125 clicks]"
         android:layout_marginTop="255dp"/>
 
     <!-- Button to buy Worker -->

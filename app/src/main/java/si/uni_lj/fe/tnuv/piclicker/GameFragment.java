@@ -10,6 +10,8 @@ import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ public class GameFragment extends Fragment {
     private int workerCount = 0;
     private int factoryCount = 0;
     private TextView textViewCookies;
+    private TextView textViewStartTapping;
     private Handler handler;
     private Runnable incrementCookiesRunnable;
     public static final String FACT_NO_KEY = "fact_no";
@@ -79,6 +82,7 @@ public class GameFragment extends Fragment {
 
         ImageButton btnClick = rootView.findViewById(R.id.btn_click);
         textViewCookies = rootView.findViewById(R.id.click);
+        textViewStartTapping = rootView.findViewById(R.id.start_tapping);
 
         // Load cookies count from SharedPreferences
         SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -112,6 +116,10 @@ public class GameFragment extends Fragment {
             editor.putString(SELECTED_BUTTON_KEY, selectedButton);
             editor.apply();
         }
+
+        // Load and start the throbbing animation
+        Animation throbAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.throb);
+        textViewStartTapping.startAnimation(throbAnimation);
 
         return rootView;
     }
@@ -206,7 +214,7 @@ public class GameFragment extends Fragment {
 
     // Update the cookies display
     private void updateCookiesDisplay() {
-        textViewCookies.setText("Clicks: " + cookies);
+        textViewCookies.setText("" + cookies);
     }
 
     // Save data to SharedPreferences
